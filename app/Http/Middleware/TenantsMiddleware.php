@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Models\Tenant;
+use App\Service\TenantService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
@@ -21,10 +22,7 @@ class TenantsMiddleware
     {
         $host = $request->getHost();
         $tenant =  Tenant::where('domain', $host)->firstOrFail();
-        DB::purge('system');
-        Config::set('database.connections.tenant.database', $tenant->database);
-        DB::connection('tenant')->reconnect();
-        DB::setDefaultConnection('tenant');
+        TenantService::switchToTenant($tenant);
         return $next($request);
     }
 }

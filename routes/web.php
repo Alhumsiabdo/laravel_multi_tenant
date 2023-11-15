@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomePageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -16,8 +17,4 @@ use Illuminate\Support\Facades\Config;
 |
 */
 
-Route::get('/', function (Request $request) {
-
-    dd(DB::table('admins')->get()->toArray());
-    return view('welcome', compact('host'));
-});
+Route::get('/', [HomePageController::class, 'index']);

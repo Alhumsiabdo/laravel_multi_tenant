@@ -20,5 +20,4 @@
             }
         </style>
     </head>
-    {{ $host }}
 </html>
