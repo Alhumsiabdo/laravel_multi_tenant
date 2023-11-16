@@ -1,27 +1,25 @@
 <?php
 
-namespace App\Console\Commands\Tenants;
+namespace App\Console\Commands;
 
-use App\Models\Tenant;
-use App\Service\TenantService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 
-class MigrateCommand extends Command
+class SystemMigrateCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'tenants:migrate';
+    protected $signature = 'system:migrate';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Tenants migration';
+    protected $description = 'Command description';
 
     /**
      * Execute the console command.
@@ -30,18 +28,13 @@ class MigrateCommand extends Command
      */
     public function handle()
     {
-        $tenants = Tenant::get();
-        $tenants->each(function ($tenant) {
-            TenantService::switchToTenant($tenant);
-            $this->info('start migrating : ' . $tenant->domain);
+        $this->info('start migrating LandLord SYSTEM');
             $this->info('------------------------------------');
             Artisan::call('migrate', [
-                '--path' => 'database/migrations/tenants/',
-                '--database' => 'tenant',
+                '--path' => 'database/migrations/system/',
+                '--database' => 'system',
             ]);
             $this->info(Artisan::output());
-        });
-
         return Command::SUCCESS;
     }
 }

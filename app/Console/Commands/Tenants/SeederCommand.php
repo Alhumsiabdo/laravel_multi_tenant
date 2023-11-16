@@ -7,21 +7,21 @@ use App\Service\TenantService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 
-class MigrateCommand extends Command
+class SeederCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'tenants:migrate';
+    protected $signature = 'tenants:seeder { class }';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Tenants migration';
+    protected $description = 'Command description';
 
     /**
      * Execute the console command.
@@ -30,14 +30,15 @@ class MigrateCommand extends Command
      */
     public function handle()
     {
+        $class = $this->argument('class');
         $tenants = Tenant::get();
-        $tenants->each(function ($tenant) {
+        $tenants->each(function ($tenant) use($class) {
             TenantService::switchToTenant($tenant);
-            $this->info('start migrating : ' . $tenant->domain);
+            $this->info('start seeding : ' . $tenant->domain);
             $this->info('------------------------------------');
-            Artisan::call('migrate', [
-                '--path' => 'database/migrations/tenants/',
-                '--database' => 'tenant',
+            Artisan::call('db:seed', [
+                "--class" => "Database\\Seeders\\" . $class,
+                "--database" => "tenant"
             ]);
             $this->info(Artisan::output());
         });

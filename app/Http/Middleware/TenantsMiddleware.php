@@ -6,8 +6,6 @@ use Closure;
 use App\Models\Tenant;
 use App\Service\TenantService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Config;
 
 class TenantsMiddleware
 {
